@@ -42,6 +42,15 @@ export class App extends Component {
         });
     };
 
+    filterContactByName = () => {
+        const { filter, contacts } = this.state;
+
+        const adjustedFilter = filter.toLocaleLowerCase();
+
+        return contacts.filter(({ name }) =>
+            name.toLocaleLowerCase().includes(adjustedFilter));
+    };
+
     OnDeleteContact = (ContactId) => {
         this.setState(prevState => ({
             contacts: prevState.contacts.filter(contact => contact.id !== ContactId),
@@ -49,7 +58,8 @@ export class App extends Component {
     };
 
     render() {
-        const { filter, contacts } = this.state;
+        const filteredContacts = this.filterContactByName()
+        const { filter } = this.state;
         return (
             <Box p={5} color="black" bg="muted">
                 <Title text="Phonebook" />
@@ -60,9 +70,8 @@ export class App extends Component {
                     handleInputName={this.handleInputName}
                 />
                 <ContactList
-                    filter={filter}
                     OnDeleteContact={this.OnDeleteContact}
-                    contacts={contacts}
+                    contacts={filteredContacts}
                 />
             </Box>
         )
